@@ -14,7 +14,8 @@ pipelines:
         script: # Modify the commands below to build your repository.
           - dotnet restore
           - dotnet publish MQTTserver -c release -o build
-        artifacts: MQTTserver/build/**
+        artifacts: 
+          - MQTTserver/build/**
     - step:
         name: Run Tests
         caches:
