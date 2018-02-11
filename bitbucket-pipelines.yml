@@ -22,7 +22,7 @@ pipelines:
           - dotnetcore
         script: # Modify the commands below to build your repository.
           - dotnet restore
-          - dotnet Test
+          - dotnet test
     - step:
         name: Publish the container
         caches:
