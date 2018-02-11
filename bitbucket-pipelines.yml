@@ -3,16 +3,31 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: microsoft/dotnet:sdk
+image: microsoft/dotnet:2.0-sdk
 
 pipelines:
   default:
     - step:
+        name: Build MQTTserver
         caches:
           - dotnetcore
         script: # Modify the commands below to build your repository.
-          - export PROJECT_NAME=yourProjectName
-          - export TEST_NAME=yourTestName
           - dotnet restore
-          - dotnet build $PROJECT_NAME
-          - dotnet test $TEST_NAME
+          - dotnet publish MQTTserver -c release -o build
+        artifacts: MQTTserver/build/**
+    - step:
+        name: Run Tests
+        caches:
+          - dotnetcore
+        script: # Modify the commands below to build your repository.
+          - dotnet restore
+          - dotnet Test
+    - step:
+        name: Publish the container
+        caches:
+          - dotnetcore
+        script: # Modify the commands below to build your repository.
+          - cd MQTTserver
+          - docker login hub.docker.com -u $dockerHubUsername -p $dockerHubPWD
+        services: 
+          - docker
