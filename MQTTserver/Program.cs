@@ -31,13 +31,16 @@ namespace MQTTserver
 
             var mqttServer = new MqttFactory().CreateMqttServer();
             await mqttServer.StartAsync(optionsBuilder.Build());
+			var ct = new CancellationTokenSource();
+            var heartbeatTask = Task.Run(async () => await ServerHeartbeat(ct.Token, mqttServer)); 
+			
             Console.WriteLine("Type 'quit' to exit");
 
-            var ct = new CancellationTokenSource(); ;
-            var heartbeatTask = Task.Run(async () => await ServerHeartbeat(ct.Token, mqttServer)); 
             while (true)
             {
-                if (Console.ReadLine().Contains("quit"))
+				string input = Console.ReadLine(); 
+				
+                if (input != null && input.Contains("quit"))
                     break; 
             }
             ct.Cancel();

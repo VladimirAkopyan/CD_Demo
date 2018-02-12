@@ -29,6 +29,9 @@ pipelines:
           - dotnetcore
         script: # Modify the commands below to build your repository.
           - cd MQTTserver
-          - docker login hub.docker.com -u $dockerHubUsername -p $dockerHubPWD
+          - docker login index.docker.io -u $dockerHubUsername -p $dockerHubPWD
+          - docker build . -t  mqtt_image
+          - docker tag mqtt_image clumsypilot/cd_bitbucket_demo:from_bitbucket
+          - docker push clumsypilot/cd_bitbucket_demo:from_bitbucket
         services: 
           - docker
