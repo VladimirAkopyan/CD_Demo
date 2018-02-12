@@ -31,8 +31,9 @@ pipelines:
           - cd MQTTserver
           - docker login -u $dockerHubUsername -p $dockerHubPWD
           - docker build . -t  mqtt_image
-          - path=clumsypilot/cd_bitbucket_demo:
-          - docker tag mqtt_image "$path${BITBUCKET_BRANCH,,}"
-          - docker push "$path${BITBUCKET_BRANCH,,}"
+          - path="clumsypilot/cd_bitbucket_demo:"
+          - tag=$(echo "$BITBUCKET_BRANCH" | tr -dc '[:alnum:]\n\r-_' | tr '/*' '_'| tr '[:upper:]' '[:lower:]')
+          - docker tag mqtt_image "$path$tag"
+          - docker push "$path$tag"
         services: 
           - docker
